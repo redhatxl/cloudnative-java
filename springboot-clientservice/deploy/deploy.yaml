@@ -1,0 +1,58 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  namespace: spring
+  name: springboot-clientservice
+  labels:
+    app: springboot-clientservice
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: springboot-clientservice
+  template:
+    metadata:
+      labels:
+        app: springboot-clientservice
+    spec:
+      containers:
+        - name: springboot-clientservice
+          image: ccr.ccs.tencentyun.com/xxxxxxxxxxxxx/springbootclientservice:img_v7
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 8080
+              protocol: TCP
+          livenessProbe:
+            httpGet:
+              port: 8080
+              path: /actuator/health
+            periodSeconds: 10
+            initialDelaySeconds: 3
+            terminationGracePeriodSeconds: 10
+            failureThreshold: 5
+            timeoutSeconds: 10
+          readinessProbe:
+            httpGet:
+              port: 8080
+              path: /actuator/health
+            initialDelaySeconds: 5
+            periodSeconds: 10
+            failureThreshold: 5
+            timeoutSeconds: 10
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: springbootclientservice
+  namespace: spring
+  labels:
+    app: springboot-clientservice
+spec:
+  ports:
+    - port: 8080
+      protocol: TCP
+      targetPort: 8080
+  type: ClusterIP
+  selector:
+    app: springboot-clientservice

@@ -1,0 +1,8 @@
+spring:
+  cloud:
+    kubernetes:
+      discovery:
+        all-namespaces: true
+  # 测试服务名称，该服务注册名称在consul/eureka 中注册名称，在K8s中服务名称为定义的service 名称
+#  application:
+#    name: springbootinittest

@@ -1,0 +1,42 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  namespace: springgateway
+  name: springboot-gateway-serviceprovider
+  labels:
+    app: springboot-gateway-serviceprovider
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: springboot-gateway-serviceprovider
+  template:
+    metadata:
+      labels:
+        app: springboot-gateway-serviceprovider
+    spec:
+      containers:
+        - name: springboot-gateway-serviceprovider
+          image: ccr.ccs.tencentyun.com/xxxxxxxxxxxxx/springbootgatewayserviceprovider:img_v5
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 8080
+              protocol: TCP
+          livenessProbe:
+            httpGet:
+              port: 8080
+              path: /actuator/health
+            periodSeconds: 10
+            initialDelaySeconds: 3
+            terminationGracePeriodSeconds: 10
+            failureThreshold: 5
+            timeoutSeconds: 10
+          readinessProbe:
+            httpGet:
+              port: 8080
+              path: /actuator/health
+            initialDelaySeconds: 5
+            periodSeconds: 10
+            failureThreshold: 5
+            timeoutSeconds: 10
+

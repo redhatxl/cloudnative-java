@@ -1,0 +1,16 @@
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: springbootgateway
+  namespace: springgateway
+  labels:
+    app: springboot-gateway
+spec:
+  ports:
+    - port: 8080
+      protocol: TCP
+      targetPort: 8080
+  type: ClusterIP
+  selector:
+    app: springboot-gateway

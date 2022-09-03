@@ -1,0 +1,19 @@
+spring:
+  cloud:
+    gateway:
+      enabled: true
+      discovery:
+        locator:
+          enabled: true
+          url-expression: "'http://'+serviceId+':'+port"
+          lower-case-service-id: true
+
+    # 使用K8s作为服务注册发现
+    kubernetes:
+      discovery:
+        enabled: true
+        all-namespaces: true
+management:
+  endpoint:
+    health:
+      enabled: true

@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: springbootinit
+  namespace: springother
+  labels:
+    app: springboot-init
+spec:
+  ports:
+    - port: 8080
+      protocol: TCP
+      targetPort: 8080
+  type: ClusterIP
+  selector:
+    app: springboot-init

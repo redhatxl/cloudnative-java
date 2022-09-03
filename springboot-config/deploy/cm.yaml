@@ -1,0 +1,42 @@
+kind: ConfigMap
+apiVersion: v1
+metadata:
+  name: springboot-config-cm
+  namespace: springconfig
+data:
+  application.yml: |-
+    spring:
+      profiles: dev
+    config:
+      applicationVersion: dev-0.0.1
+      app:
+        domain: dev.smartops.anchnet.com
+        api-domain: devapi.smartops.anchnet.com
+        auth-callback-api: https://dev.smartops.anchnet.com/dev/wx/bind-callback
+        aws-proxy-host: 192.168.9.82
+        aws-proxy-port: 8118
+        cors-allowed-origins: http://local.smartops.anchnet.com, https://dev.smartops.anchnet.com
+    ---
+    spring:
+      profiles: test
+    config:
+      applicationVersion: test-0.0.1
+      app:
+        domain: test.smartops.anchnet.com
+        api-domain: testapi.smartops.anchnet.com
+        auth-callback-api: https://test.smartops.anchnet.com/dev/wx/bind-callback
+        aws-proxy-host: 192.168.9.82
+        aws-proxy-port: 8118
+        cors-allowed-origins: http://local.smartops.anchnet.com, https://test.smartops.anchnet.com
+    ---
+    spring:
+      profiles: prod
+    config:
+      applicationVersion: prod-0.0.1
+      app:
+        domain: smartops.anchnet.com
+        api-domain: api.smartops.anchnet.com
+        auth-callback-api: https://smartops.anchnet.com/dev/wx/bind-callback
+        aws-proxy-host: 192.168.9.82
+        aws-proxy-port: 8118
+        cors-allowed-origins: http://smartops.anchnet.com, https://smartops.anchnet.com

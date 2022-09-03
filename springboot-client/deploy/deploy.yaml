@@ -1,0 +1,42 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  namespace: spring
+  name: springboot-client
+  labels:
+    app: springboot-client
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: springboot-client
+  template:
+    metadata:
+      labels:
+        app: springboot-client
+    spec:
+      containers:
+        - name: springboot-client
+          image: ccr.ccs.tencentyun.com/xxxxxxxxxxxxx/springbootclient:v5
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 8080
+              protocol: TCP
+          livenessProbe:
+            httpGet:
+              port: 8080
+              path: /health
+            periodSeconds: 10
+            initialDelaySeconds: 3
+            terminationGracePeriodSeconds: 10
+            failureThreshold: 5
+            timeoutSeconds: 10
+          readinessProbe:
+            httpGet:
+              port: 8080
+              path: /health
+            initialDelaySeconds: 5
+            periodSeconds: 10
+            failureThreshold: 5
+            timeoutSeconds: 10
+

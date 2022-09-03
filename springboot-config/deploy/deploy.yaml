@@ -1,0 +1,63 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  namespace: springconfig
+  name: springboot-config
+  labels:
+    app: springboot-config
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: springboot-config
+  template:
+    metadata:
+      labels:
+        app: springboot-config
+    spec:
+      containers:
+        - name: springboot-config
+          image: ccr.ccs.tencentyun.com/xxxxxxxxxxxxx/springbootconfig:img_v8
+          imagePullPolicy: IfNotPresent
+          # 在此制定使用那个变量，用于指定配置文件
+          env:
+            - name: PROFILE
+              value: prod
+          ports:
+            - containerPort: 8080
+              protocol: TCP
+
+          livenessProbe:
+            httpGet:
+              port: 8080
+              path: /actuator/health
+            periodSeconds: 10
+            initialDelaySeconds: 3
+            terminationGracePeriodSeconds: 10
+            failureThreshold: 5
+            timeoutSeconds: 10
+          readinessProbe:
+            httpGet:
+              port: 8080
+              path: /actuator/health
+            initialDelaySeconds: 5
+            periodSeconds: 10
+            failureThreshold: 5
+            timeoutSeconds: 10
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: springbootconfig
+  namespace: springconfig
+  labels:
+    app: springboot-config
+spec:
+  ports:
+    - port: 8080
+      protocol: TCP
+      targetPort: 8080
+  type: ClusterIP
+  selector:
+    app: springboot-config
